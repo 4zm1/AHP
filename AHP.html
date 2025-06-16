@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pemilihan Pemasok - Metode AHP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏭 Sistem Pemilihan Pemasok</h1>
+            <p>Metode AHP (Analytic Hierarchy Process)</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: Kriteria -->
+            <div class="step">
+                <h3><span class="step-number">1</span>Kriteria Pemilihan Pemasok</h3>
+                <div class="results">
+                    <h4>Kriteria yang Digunakan:</h4>
+                    <div class="priority-weight">
+                        <span><strong>K1:</strong> Kualitas Produk</span>
+                    </div>
+                    <div class="priority-weight">
+                        <span><strong>K2:</strong> Harga</span>
+                    </div>
+                    <div class="priority-weight">
+                        <span><strong>K3:</strong> Ketepatan Waktu Pengiriman</span>
+                    </div>
+                    <div class="priority-weight">
+                        <span><strong>K4:</strong> Layanan Purna Jual</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Matrix Perbandingan Berpasangan -->
+            <div class="step">
+                <h3><span class="step-number">2</span>Matrix Perbandingan Berpasangan Kriteria</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    <strong>Petunjuk:</strong> Gunakan skala 1-9 dimana 1 = sama penting, 3 = sedikit lebih penting, 
+                    5 = lebih penting, 7 = sangat penting, 9 = mutlak lebih penting
+                </p>
+                <div class="matrix-container">
+                    <table id="criteriaMatrix">
+                        <thead>
+                            <tr>
+                                <th>Kriteria</th>
+                                <th>K1</th>
+                                <th>K2</th>
+                                <th>K3</th>
+                                <th>K4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>K1: Kualitas Produk</th>
+                                <td>1</td>
+                                <td><input type="number" class="matrix-input" id="c12" value="3" min="1" max="9" step="0.5"></td>
+                                <td><input type="number" class="matrix-input" id="c13" value="5" min="1" max="9" step="0.5"></td>
+                                <td><input type="number" class="matrix-input" id="c14" value="4" min="1" max="9" step="0.5"></td>
+                            </tr>
+                            <tr>
+                                <th>K2: Harga</th>
+                                <td id="c21">0.33</td>
+                                <td>1</td>
+                                <td><input type="number" class="matrix-input" id="c23" value="3" min="1" max="9" step="0.5"></td>
+                                <td><input type="number" class="matrix-input" id="c24" value="2" min="1" max="9" step="0.5"></td>
+                            </tr>
+                            <tr>
+                                <th>K3: Ketepatan Pengiriman</th>
+                                <td id="c31">0.20</td>
+                                <td id="c32">0.33</td>
+                                <td>1</td>
+                                <td><input type="number" class="matrix-input" id="c34" value="0.5" min="0.1" max="9" step="0.1"></td>
+                            </tr>
+                            <tr>
+                                <th>K4: Layanan Purna Jual</th>
+                                <td id="c41">0.25</td>
+                                <td id="c42">0.50</td>
+                                <td id="c43">2</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn" onclick="calculateWeights()">Hitung Bobot Prioritas</button>
+                <div id="consistencyResult"></div>
+            </div>
+
+            <!-- Step 3: Bobot Prioritas -->
+            <div class="step">
+                <h3><span class="step-number">3</span>Bobot Prioritas Kriteria</h3>
+                <div id="weightsResult" class="results">
+                    <p>Klik "Hitung Bobot Prioritas" untuk melihat hasil</p>
+                </div>
+            </div>
+
+            <!-- Step 4: Penilaian Alternatif -->
+            <div class="step">
+                <h3><span class="step-number">4</span>Penilaian Alternatif Pemasok</h3>
+                <p style="margin-bottom: 15px; color: #666;">
+                    <strong>Petunjuk:</strong> Berikan nilai 1-10 untuk setiap pemasok pada setiap kriteria
+                </p>
+                <div class="matrix-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pemasok / Kriteria</th>
+                                <th>K1<br>(Kualitas)</th>
+                                <th>K2<br>(Harga)</th>
+                                <th>K3<br>(Ketepatan)</th>
+                                <th>K4<br>(Layanan)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Pemasok A</th>
+                                <td><input type="number" class="supplier-input" id="a1" value="9" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="a2" value="7" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="a3" value="8" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="a4" value="8" min="1" max="10"></td>
+                            </tr>
+                            <tr>
+                                <th>Pemasok B</th>
+                                <td><input type="number" class="supplier-input" id="b1" value="7" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="b2" value="9" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="b3" value="6" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="b4" value="7" min="1" max="10"></td>
+                            </tr>
+                            <tr>
+                                <th>Pemasok C</th>
+                                <td><input type="number" class="supplier-input" id="c1" value="6" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="c2" value="8" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="c3" value="7" min="1" max="10"></td>
+                                <td><input type="number" class="supplier-input" id="c4" value="6" min="1" max="10"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn" onclick="calculateFinalScores()">Hitung Skor Akhir</button>
+            </div>
+
+            <!-- Step 5: Hasil Akhir -->
+            <div class="step">
+                <h3><span class="step-number">5</span>Hasil Akhir & Ranking</h3>
+                <div id="finalResults" class="final-results">
+                    <p>Klik "Hitung Skor Akhir" untuk melihat hasil</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
